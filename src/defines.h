@@ -9,6 +9,8 @@
 #define BUTTON_UP 6
 #define BUTTON_DOWN 5
 
+#define FET A1
+
 #define CLK 9
 #define DIO 8
 

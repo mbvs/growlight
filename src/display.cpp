@@ -50,7 +50,7 @@ void displayTick(LightData *current)
     {
         if (millis() - then > 500)
         {
-            Serial.println("updating time");
+            //Serial.println("updating time");
 
             DateTime time = rtc.now();
 

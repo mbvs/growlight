@@ -3,10 +3,10 @@
 #include "OneButton.h"
 #include "RTClib.h"
 
-
 #include "defines.h"
 #include "states.h"
 #include "display.h"
+#include "lights.h"
 
 OneButton modeButton(BUTTON_MODE, true);
 OneButton upButton(BUTTON_UP, true);
@@ -21,6 +21,8 @@ void setup()
   pinMode(LED_TIME, OUTPUT);
   pinMode(LED_ON, OUTPUT);
   pinMode(LED_OFF, OUTPUT);
+  pinMode(FET, OUTPUT);
+  digitalWrite(FET, LOW);
 
   modeButton.attachClick(mode);
 
@@ -39,6 +41,8 @@ void setup()
     abort();
   }
 
+  rtc.adjust(DateTime(1, 1, 1, 0, 0, 0));
+
   if (rtc.lostPower())
   {
     Serial.println("RTC lost power, let's set the time!");
@@ -54,7 +58,9 @@ void setup()
 void loop()
 {
   delay(10);
+
   displayTick(lightData);
+  lightsTick(lightData);
 
   modeButton.tick();
   downButton.tick();

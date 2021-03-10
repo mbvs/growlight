@@ -10,8 +10,8 @@ TimeSpan step_small = TimeSpan(0, 0, 1, 0);
 
 LightData initial = {
     .state = STATE_TIME,
-    .on = DateTime(1, 1, 1, 0, 0, 0),
-    .off = DateTime(1, 1, 1, 0, 0, 0),
+    .on = DateTime(1, 1, 1, 0, 1, 0),
+    .off = DateTime(1, 1, 1, 0, 2, 0),
     .dirty = true};
 
 LightData *lightData = &initial;
