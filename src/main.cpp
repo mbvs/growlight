@@ -1,5 +1,4 @@
 #include <Arduino.h>
-// #include <EEPROM.h>
 #include "OneButton.h"
 #include "RTClib.h"
 
@@ -58,7 +57,6 @@ void setup()
 void loop()
 {
   delay(10);
-
   displayTick(lightData);
   lightsTick(lightData);
 
