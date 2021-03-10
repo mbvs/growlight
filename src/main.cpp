@@ -59,6 +59,7 @@ void loop()
   delay(10);
   displayTick(lightData);
   lightsTick(lightData);
+  statesTick(lightData);
 
   modeButton.tick();
   downButton.tick();

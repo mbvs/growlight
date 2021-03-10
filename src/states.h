@@ -23,4 +23,6 @@ void mode();
 void up();
 void down();
 
+void statesTick(LightData *store);
+
 #endif
