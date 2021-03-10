@@ -40,7 +40,8 @@ void setup()
     abort();
   }
 
-  rtc.adjust(DateTime(1, 1, 1, 0, 0, 0));
+  //rtc.adjust(DateTime(1, 1, 1, 0, 0, 0));
+  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   if (rtc.lostPower())
   {
@@ -52,6 +53,7 @@ void setup()
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
   }
+
 }
 
 void loop()
