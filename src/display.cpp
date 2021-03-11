@@ -96,7 +96,7 @@ void time_temp_tick()
             }
             else
             {
-                temp = (int)rtc.getTemperature();
+                temp = round(rtc.getTemperature());
                 display.showNumberDec(temp, true, 2);
                 display.setSegments(DEGREE_CELCIUS, 2, 2);
             }

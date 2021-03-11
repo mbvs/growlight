@@ -40,8 +40,12 @@ void setup()
     abort();
   }
 
-  //rtc.adjust(DateTime(1, 1, 1, 0, 0, 0));
+  //rtc.adjust();
   //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  DateTime now = rtc.now();
+  static TimeSpan step = TimeSpan(0, 0, 1, 0);
+  lightData->on = now + step;
+  lightData->off = now + step + step;
 
   if (rtc.lostPower())
   {
