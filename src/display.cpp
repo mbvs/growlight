@@ -19,7 +19,7 @@ typedef enum
 
 void initDisplay()
 {
-    display.setBrightness(0x0a);
+    display.setBrightness(2);
 }
 
 void displayTick(LightData *store)

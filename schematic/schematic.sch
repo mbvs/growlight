@@ -1,0 +1,193 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Module:Arduino_Nano_v2.x A1
+U 1 1 604B6E58
+P 3900 2300
+F 0 "A1" H 3900 1211 50  0000 C CNN
+F 1 "Arduino_Nano_v2.x" H 3900 1120 50  0000 C CNN
+F 2 "Module:Arduino_Nano" H 3900 2300 50  0001 C CIN
+F 3 "https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf" H 3900 2300 50  0001 C CNN
+	1    3900 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L megasaturnv:RTC_DS3231 RTC1
+U 1 1 604B914B
+P 7450 2100
+F 0 "RTC1" H 7533 2587 60  0000 C CNN
+F 1 "RTC_DS3231" H 7533 2481 60  0000 C CNN
+F 2 "megasaturnv:RTC_DS3231" H 7250 2100 60  0001 C CNN
+F 3 "" H 7250 2100 60  0001 C CNN
+	1    7450 2100
+	-1   0    0    1   
+$EndComp
+$Comp
+L roboulbricht:TM1637Display U1
+U 1 1 604BB823
+P 7450 1300
+F 0 "U1" H 8028 1351 50  0000 L CNN
+F 1 "TM1637Display" H 8028 1260 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical" H 7450 1300 50  0001 C CNN
+F 3 "" H 7450 1300 50  0001 C CNN
+	1    7450 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW3
+U 1 1 604BF9A7
+P 2450 2200
+F 0 "SW3" H 2450 2485 50  0000 C CNN
+F 1 "DOWN" H 2450 2394 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm_H5mm" H 2450 2400 50  0001 C CNN
+F 3 "~" H 2450 2400 50  0001 C CNN
+	1    2450 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW1
+U 1 1 604C07B6
+P 1200 2200
+F 0 "SW1" H 1200 2485 50  0000 C CNN
+F 1 "MODE" H 1200 2394 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm_H5mm" H 1200 2400 50  0001 C CNN
+F 3 "~" H 1200 2400 50  0001 C CNN
+	1    1200 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW4
+U 1 1 604C0961
+P 7250 5100
+F 0 "SW4" H 7250 5385 50  0000 C CNN
+F 1 "SW_Push" H 7250 5294 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm_H5mm" H 7250 5300 50  0001 C CNN
+F 3 "~" H 7250 5300 50  0001 C CNN
+	1    7250 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:IRLZ34N Q1
+U 1 1 604C0B43
+P 3900 4550
+F 0 "Q1" H 4104 4596 50  0000 L CNN
+F 1 "IRLZ34N" H 4104 4505 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 4150 4475 50  0001 L CIN
+F 3 "http://www.infineon.com/dgdl/irlz34npbf.pdf?fileId=5546d462533600a40153567206892720" H 3900 4550 50  0001 L CNN
+	1    3900 4550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 604C1EDF
+P 8650 3200
+F 0 "D1" H 8643 3416 50  0000 C CNN
+F 1 "LED" H 8643 3325 50  0000 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 8650 3200 50  0001 C CNN
+F 3 "~" H 8650 3200 50  0001 C CNN
+	1    8650 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D2
+U 1 1 604C2966
+P 9200 3150
+F 0 "D2" H 9193 3366 50  0000 C CNN
+F 1 "LED" H 9193 3275 50  0000 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 9200 3150 50  0001 C CNN
+F 3 "~" H 9200 3150 50  0001 C CNN
+	1    9200 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D3
+U 1 1 604C2CF4
+P 9800 3150
+F 0 "D3" H 9793 3366 50  0000 C CNN
+F 1 "LED" H 9793 3275 50  0000 C CNN
+F 2 "LED_THT:LED_D3.0mm" H 9800 3150 50  0001 C CNN
+F 3 "~" H 9800 3150 50  0001 C CNN
+	1    9800 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 604C53E4
+P 8600 3850
+F 0 "R2" H 8670 3896 50  0000 L CNN
+F 1 "R" H 8670 3805 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Vertical" V 8530 3850 50  0001 C CNN
+F 3 "~" H 8600 3850 50  0001 C CNN
+	1    8600 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 604C5C13
+P 9200 3850
+F 0 "R3" H 9270 3896 50  0000 L CNN
+F 1 "R" H 9270 3805 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Vertical" V 9130 3850 50  0001 C CNN
+F 3 "~" H 9200 3850 50  0001 C CNN
+	1    9200 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R4
+U 1 1 604C5F21
+P 9850 3800
+F 0 "R4" H 9920 3846 50  0000 L CNN
+F 1 "R" H 9920 3755 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Vertical" V 9780 3800 50  0001 C CNN
+F 3 "~" H 9850 3800 50  0001 C CNN
+	1    9850 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 604C6158
+P 4000 4100
+F 0 "R1" H 4070 4146 50  0000 L CNN
+F 1 "R" H 4070 4055 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Vertical" V 3930 4100 50  0001 C CNN
+F 3 "~" H 4000 4100 50  0001 C CNN
+	1    4000 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 2200 3400 2200
+Wire Wire Line
+	2000 3250 2000 3150
+Wire Wire Line
+	3400 2400 1400 2400
+Wire Wire Line
+	1400 2400 1400 2200
+Wire Wire Line
+	2000 2300 3400 2300
+$Comp
+L Switch:SW_Push SW2
+U 1 1 604CA6A8
+P 1800 2200
+F 0 "SW2" H 1800 2485 50  0000 C CNN
+F 1 "UP" H 1800 2394 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm_H5mm" H 1800 2400 50  0001 C CNN
+F 3 "~" H 1800 2400 50  0001 C CNN
+	1    1800 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2000 2300 2000 2200
+$EndSCHEMATC

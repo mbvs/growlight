@@ -9,7 +9,7 @@
 #define BUTTON_UP 6
 #define BUTTON_DOWN 5
 
-#define FET 10 // 3, 5, 6, 9, 10, 11
+#define FET 10
 
 #define CLK 9
 #define DIO 8

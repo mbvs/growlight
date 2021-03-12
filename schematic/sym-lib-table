@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name megasaturnv)(type Legacy)(uri ${KIPRJMOD}/symbols/megasaturnv_custom_components.lib)(options "")(descr ""))
+  (lib (name roboulbricht)(type Legacy)(uri ${KIPRJMOD}/symbols/rur.lib)(options "")(descr ""))
+)

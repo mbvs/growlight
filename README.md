@@ -2,7 +2,7 @@
 Arduino growing lights timer
 
 #TODO:
-* add a lights_on overwrite switch? (pure mechanical or via code?)
+* add on/off/on switch to switch between timer / ligths off / lights on
 
 * transfer button code to states?
 * bundle lightData in own module (store?)
