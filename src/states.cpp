@@ -11,6 +11,7 @@ static TimeSpan step_big = TimeSpan(0, 0, 5, 0);
 static TimeSpan step_small = TimeSpan(0, 0, 1, 0);
 
 LightData initial = {
+    .mode = MODE_OFF,
     .state = STATE_TIME,
     .on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0),
     .off = DateTime(1, 1, 1, int(EEPROM.read(2)), int(EEPROM.read(3)), 0),
@@ -18,8 +19,10 @@ LightData initial = {
 
 LightData *lightData = &initial;
 
-void statesTick(LightData *store) {
-    if (store->state != STATE_TIME && millis() - then > max_idle) {
+void statesTick(LightData *store)
+{
+    if (store->state != STATE_TIME && millis() - then > max_idle)
+    {
         store->dirty = true;
         store->state = STATE_TIME;
         store->on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0);
@@ -28,17 +31,21 @@ void statesTick(LightData *store) {
     }
 }
 
-void idleReset() {
+void idleReset()
+{
     then = millis();
 }
 
-bool writeEEPROM(int add_hour, int add_minute, int hour, int minute) {
+bool writeEEPROM(int add_hour, int add_minute, int hour, int minute)
+{
     bool written = false;
-    if (int(EEPROM.read(add_hour)) != hour) {
+    if (int(EEPROM.read(add_hour)) != hour)
+    {
         EEPROM.write(add_hour, byte(hour));
         written = true;
     }
-    if (int(EEPROM.read(add_minute)) != minute) {
+    if (int(EEPROM.read(add_minute)) != minute)
+    {
         EEPROM.write(add_minute, byte(minute));
         written = true;
     }
@@ -46,7 +53,7 @@ bool writeEEPROM(int add_hour, int add_minute, int hour, int minute) {
     return written;
 }
 
-void mode()
+void state()
 {
     lightData->dirty = true;
 

@@ -5,12 +5,20 @@
 
 typedef enum
 {
-  STATE_TIME = 'T',
-  STATE_ON = 'N',
-  STATE_OFF = 'F',
+  STATE_TIME,
+  STATE_ON,
+  STATE_OFF
 } State;
 
+typedef enum
+{
+  MODE_TIMER,
+  MODE_LIGHTS,
+  MODE_OFF
+} Mode;
+
 typedef struct {
+    Mode mode;
     State state;
     DateTime on;
     DateTime off;
@@ -19,7 +27,7 @@ typedef struct {
 
 extern LightData *lightData;
 
-void mode();
+void state();
 void up();
 void down();
 

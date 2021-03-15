@@ -11,19 +11,65 @@ typedef enum
     DOWN
 } LightsState;
 
-static LightsState state = OFF;
+static LightsState lights_state = OFF;
 
 static const byte DIMM_INTERVAL = 40;
 static unsigned long then;
+static byte level = 0;
 
-static void switch_off(int time, int on, int off);
-static void switch_on(int time, int on, int off);
+static void check_times(LightData *store);
+static void check_lights(LightData *store);
+
+static void check_off_time(int time, int on, int off);
+static void check_on_time(int time, int on, int off);
 static void dimm_up();
 static void dimm_down();
+static void tick_up();
+static void tick_down();
 
 void lightsTick(LightData *store)
 {
-    // don't switch lights when editing on off times
+    if (store->mode == MODE_TIMER)
+    {
+        check_times(store);
+    }
+    else
+    {
+        check_lights(store);
+    }
+}
+
+void check_lights(LightData *store)
+{
+    switch (lights_state)
+    {
+    case ON:
+        if (store->mode == MODE_OFF)
+            dimm_down();
+        break;
+    case OFF:
+        if (store->mode == MODE_LIGHTS)
+            dimm_up();
+        break;
+    case UP:
+        if (store->mode == MODE_OFF)
+            dimm_down();
+        else
+            tick_up();
+        break;
+    case DOWN:
+        if (store->mode == MODE_LIGHTS)
+            dimm_up();
+        else
+            tick_down();
+        break;
+    }
+}
+
+void check_times(LightData *store)
+{
+    // don't switch lights while editing times
+    // TODO: what if we are currently dimming?
     if (store->state != STATE_TIME)
         return;
 
@@ -41,31 +87,30 @@ void lightsTick(LightData *store)
     // Serial.print(" -> ");
     // Serial.println(state);
 
-    switch (state)
+    switch (lights_state)
     {
     case ON:
-        switch_off(time, on, off);
+        check_off_time(time, on, off);
         break;
     case OFF:
-        switch_on(time, on, off);
+        check_on_time(time, on, off);
         break;
     case UP:
-        dimm_up();
+        tick_up();
         break;
     case DOWN:
-        dimm_down();
+        tick_down();
         break;
     }
 }
 
-void switch_on(int time, int on, int off)
+void check_on_time(int time, int on, int off)
 {
     if (off > on)
     {
         if (on <= time && time < off)
         {
-            then = millis();
-            state = UP;
+            dimm_up();
             Serial.println("turning lights on (off > on)");
         }
     }
@@ -73,21 +118,19 @@ void switch_on(int time, int on, int off)
     {
         if (!(off <= time && time < on))
         {
-            then = millis();
-            state = UP;
+            dimm_up();
             Serial.println("turning lights on (off < on)");
         }
     }
 }
 
-void switch_off(int time, int on, int off)
+void check_off_time(int time, int on, int off)
 {
     if (off > on)
     {
         if (!(on <= time && time < off))
         {
-            then = millis();
-            state = DOWN;
+            dimm_down();
             Serial.println("turning lights off (off > on)");
         }
     }
@@ -95,8 +138,7 @@ void switch_off(int time, int on, int off)
     {
         if (off <= time && time < on)
         {
-            then = millis();
-            state = DOWN;
+            dimm_down();
             Serial.println("turning lights off (off < on)");
         }
     }
@@ -104,34 +146,50 @@ void switch_off(int time, int on, int off)
 
 static void dimm_up()
 {
-    static byte level = 0;
-
-    if (millis() - then > DIMM_INTERVAL)
-    {
-        analogWrite(FET, level++);
-        then = millis();
-        if (level == 255)
-        {
-            state = ON;
-            level = 0;
-            digitalWrite(FET, HIGH);
-        }
-    }
+    then = millis();
+    lights_state = UP;
 }
 
 static void dimm_down()
 {
-    static byte level = 255;
+    then = millis();
+    lights_state = DOWN;
+}
 
+static void tick_up()
+{
     if (millis() - then > DIMM_INTERVAL)
     {
-        analogWrite(FET, level--);
-        then = millis();
+        if (level == 255)
+        {
+            lights_state = ON;
+            digitalWrite(FET, HIGH);
+        }
+        else
+        {
+            analogWrite(FET, level++);
+            Serial.print("dimming up ");
+            Serial.println(level);
+            then = millis();
+        }
+    }
+}
+
+static void tick_down()
+{
+    if (millis() - then > DIMM_INTERVAL)
+    {
         if (level == 0)
         {
-            state = OFF;
-            level = 255;
+            lights_state = OFF;
             digitalWrite(FET, LOW);
+        }
+        else
+        {
+            analogWrite(FET, level--);
+            Serial.print("dimming down ");
+            Serial.println(level);
+            then = millis();
         }
     }
 }
