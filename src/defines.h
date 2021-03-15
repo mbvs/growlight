@@ -8,7 +8,7 @@
 #define BUTTON_MODE 7
 #define BUTTON_UP 6
 #define BUTTON_DOWN 5
-#define BUTTON_CONFIRM 13
+#define BUTTON_CONFIRM A1
 
 #define SWITCH_TIMER 11
 #define SWITCH_LIGHT 12

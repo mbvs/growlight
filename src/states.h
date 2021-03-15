@@ -28,6 +28,7 @@ typedef struct {
 extern LightData *lightData;
 
 void state();
+void confirm();
 void up();
 void down();
 

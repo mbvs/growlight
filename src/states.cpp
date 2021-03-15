@@ -77,6 +77,10 @@ void state()
     Serial.println((char)lightData->state);
 }
 
+void confirm() {
+    Serial.println("CONFIRM pressed");
+}
+
 void down()
 {
     lightData->dirty = true;

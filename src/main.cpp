@@ -7,7 +7,7 @@
 #include "display.h"
 #include "lights.h"
 
-OneButton modeButton(BUTTON_MODE, true);
+OneButton stateButton(BUTTON_MODE, true);
 OneButton upButton(BUTTON_UP, true);
 OneButton downButton(BUTTON_DOWN, true);
 OneButton confirmButton(BUTTON_CONFIRM, true);
@@ -38,7 +38,9 @@ void setup()
 
   digitalWrite(FET, LOW);
 
-  modeButton.attachClick(state);
+  stateButton.attachClick(state);
+  confirmButton.attachClick(confirm);
+
   upButton.attachClick(up);
   upButton.attachDuringLongPress(up);
 
@@ -54,13 +56,12 @@ void setup()
     abort();
   }
 
-  //rtc.adjust();
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
-  DateTime now = rtc.now();
-  static TimeSpan step = TimeSpan(0, 0, 1, 0);
-  lightData->on = now + step;
-  lightData->off = now + step + step;
+  // DateTime now = rtc.now();
+  // static TimeSpan step = TimeSpan(0, 0, 1, 0);
+  // lightData->on = now + step;
+  // lightData->off = now + step + step;
 
   if (rtc.lostPower())
   {
@@ -96,7 +97,8 @@ void loop()
   lightsTick(lightData);
   statesTick(lightData);
 
-  modeButton.tick();
+  stateButton.tick();
+  confirmButton.tick();
   downButton.tick();
   upButton.tick();
 }
