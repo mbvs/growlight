@@ -14,16 +14,6 @@ OneButton confirmButton(BUTTON_CONFIRM, true);
 
 RTC_DS3231 rtc;
 
-void timer_on()
-{
-  Serial.println("timer on");
-};
-
-void lights_on()
-{
-  Serial.println("lights on");
-};
-
 void setup()
 {
   Serial.begin(9600);
@@ -56,7 +46,7 @@ void setup()
     abort();
   }
 
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   // DateTime now = rtc.now();
   // static TimeSpan step = TimeSpan(0, 0, 1, 0);

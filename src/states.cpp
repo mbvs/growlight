@@ -65,20 +65,32 @@ void state()
     else if (lightData->state == STATE_ON)
     {
         idleReset();
-        writeEEPROM(0, 1, lightData->on.hour(), lightData->on.minute());
+
         lightData->state = STATE_OFF;
     }
     else if (lightData->state == STATE_OFF)
     {
-        writeEEPROM(2, 3, lightData->off.hour(), lightData->off.minute());
+
         lightData->state = STATE_TIME;
     }
     Serial.print("STATE change:");
     Serial.println((char)lightData->state);
 }
 
-void confirm() {
-    Serial.println("CONFIRM pressed");
+void confirm()
+{
+    if (lightData->state == STATE_ON)
+    {
+        writeEEPROM(0, 1, lightData->on.hour(), lightData->on.minute());
+        // blink
+    }
+    else if (lightData->state == STATE_OFF)
+    {
+        writeEEPROM(2, 3, lightData->off.hour(), lightData->off.minute());
+        // blink
+    }
+
+    // what do we do when setting time?
 }
 
 void down()
