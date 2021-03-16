@@ -2,8 +2,8 @@
 Arduino growing lights timer
 
 #TODO:
-* add set button? (initates save in eeprom, lets display flash)
+* complete in code docu
+* write meaningful readme
 
-* transfer button code to states?
-* bundle lightData in own module (store?)
+* schematic - board-layout
 

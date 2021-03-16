@@ -3,39 +3,74 @@
 #include "states.h"
 #include "defines.h"
 
+
+/**
+ * states.cpp
+ * 
+ * Handles global states depending on button-pushes and status of toggle switch
+ */
+
 extern RTC_DS3231 rtc;
 
-static unsigned long max_idle = 5000;
-static unsigned long then = millis();
-static TimeSpan step_big = TimeSpan(0, 0, 5, 0);
-static TimeSpan step_small = TimeSpan(0, 0, 1, 0);
+static const int IDLE_LONG = 5000;                       // fallback delay when in on or off state
+static const int IDLE_SHORT = 1000;                      // fallback delay after a blink
+static const TimeSpan step_big = TimeSpan(0, 0, 5, 0);   // 5 min - step for on or off times
+static const TimeSpan step_small = TimeSpan(0, 0, 1, 0); // 1 min - step for time
 
-LightData initial = {
-    .mode = MODE_OFF,
-    .state = STATE_TIME,
-    .on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0),
-    .off = DateTime(1, 1, 1, int(EEPROM.read(2)), int(EEPROM.read(3)), 0),
-    .dirty = true};
+static unsigned long max_idle; // fallback delay (holds IDLE_LONG or IDLE_SHORT)
+static unsigned long then;     // timing
 
-LightData *lightData = &initial;
+static LightData initial;        // declaration for lightData pointer
+LightData *lightData = &initial; // declaration of lightData pointer
 
-void statesTick(LightData *store)
+static void tick_mode();
+
+/**
+ * Initializes the state with starting values
+ */
+void init_states()
 {
+    initial = {
+        .mode = MODE_OFF,
+        .state = STATE_TIME,
+        .time = rtc.now(),
+        .on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0),
+        .off = DateTime(1, 1, 1, int(EEPROM.read(2)), int(EEPROM.read(3)), 0),
+        .blink = false,
+        .dirty = true};
+}
+
+/**
+ * Ticks the states in every loop
+ */
+void tick_states(LightData *store)
+{
+    tick_mode();
+
+    // fallback-routine when nothing happens in on or off state
     if (store->state != STATE_TIME && millis() - then > max_idle)
     {
         store->dirty = true;
         store->state = STATE_TIME;
         store->on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0);
         store->off = DateTime(1, 1, 1, int(EEPROM.read(2)), int(EEPROM.read(3)), 0);
-        Serial.println("idle switchback to STATE_TIME");
+        Serial.println("falling back to state STATE_TIME");
     }
 }
 
-void idleReset()
+/**
+ * Resets the idle interval after push on up or down
+ */
+void idleReset(int idle_time)
 {
+    max_idle = idle_time;
     then = millis();
 }
 
+/**
+ * Writes actual on/off times to eeprom after confirm push
+ * (when something was actually changed)
+ */
 bool writeEEPROM(int add_hour, int add_minute, int hour, int minute)
 {
     bool written = false;
@@ -53,94 +88,134 @@ bool writeEEPROM(int add_hour, int add_minute, int hour, int minute)
     return written;
 }
 
+/**
+ * Checks status of toggle switch and sets mode
+ */
+void tick_mode()
+{
+    if (digitalRead(SWITCH_LIGHT) == LOW && lightData->mode != MODE_LIGHTS)
+    {
+        lightData->mode = MODE_LIGHTS;
+        Serial.println("switching mode to MODE_LIGHTS");
+    }
+    else if (digitalRead(SWITCH_TIMER) == LOW && lightData->mode != MODE_TIMER)
+    {
+        lightData->mode = MODE_TIMER;
+        Serial.println("switching mode to MODE_TIMER");
+    }
+    else if (digitalRead(SWITCH_TIMER) != LOW && digitalRead(SWITCH_LIGHT) != LOW && lightData->mode != MODE_OFF)
+    {
+        lightData->mode = MODE_OFF;
+        Serial.println("switching mode to MODE_OFF");
+    }
+}
+
+
+/**
+ * StateButton was pushed
+ */
 void state()
 {
     lightData->dirty = true;
+    idleReset(IDLE_LONG);
 
     if (lightData->state == STATE_TIME)
     {
-        idleReset();
         lightData->state = STATE_ON;
+        Serial.println("switching state to STATE_ON");
     }
     else if (lightData->state == STATE_ON)
     {
-        idleReset();
-
         lightData->state = STATE_OFF;
+        Serial.println("switching state to STATE_OFF");
     }
     else if (lightData->state == STATE_OFF)
     {
-
         lightData->state = STATE_TIME;
+        Serial.println("switching state to STATE_TIME");
     }
-    Serial.print("STATE change:");
-    Serial.println((char)lightData->state);
 }
 
+/**
+ * ConfirmButton was pushed
+ */
 void confirm()
 {
+    idleReset(IDLE_SHORT);
+    lightData->blink = true;
+    lightData->dirty = true;
+
     if (lightData->state == STATE_ON)
     {
         writeEEPROM(0, 1, lightData->on.hour(), lightData->on.minute());
-        // blink
+        Serial.print("setting ON time to ");
+        Serial.println(lightData->on.hour()*100 + lightData->on.minute());
     }
     else if (lightData->state == STATE_OFF)
     {
         writeEEPROM(2, 3, lightData->off.hour(), lightData->off.minute());
-        // blink
+        Serial.print("setting OFF time to ");
+        Serial.println(lightData->off.hour()*100 + lightData->off.minute());
     }
-
-    // what do we do when setting time?
+    else if (lightData->state == STATE_SET_TIME)
+    {
+        rtc.adjust(DateTime(lightData->time));
+        Serial.print("setting time to ");
+        Serial.println(lightData->time.hour()*100 + lightData->time.minute());
+    }
 }
 
+/**
+ * DownButton was pushed
+ */
 void down()
 {
     lightData->dirty = true;
+    idleReset(IDLE_LONG);
+
     if (lightData->state == STATE_TIME)
     {
-        DateTime now = rtc.now();
-        rtc.adjust(now - step_small);
+        lightData->time = rtc.now() - step_small;
+        lightData->state = STATE_SET_TIME;
+        Serial.println("switching state to STATE_SET_TIME");
+    }
+    else if (lightData->state == STATE_SET_TIME)
+    {
+        lightData->time = lightData->time - step_small;
     }
     else if (lightData->state == STATE_ON)
     {
-        idleReset();
         lightData->on = lightData->on - step_big;
-        char buf[] = "hh:mm";
-        Serial.print("on-time: ");
-        Serial.println(lightData->on.toString(buf));
     }
     else if (lightData->state == STATE_OFF)
     {
-        idleReset();
         lightData->off = lightData->off - step_big;
-        char buf[] = "hh:mm";
-        Serial.print("off-time: ");
-        Serial.println(lightData->off.toString(buf));
     }
 }
 
+/**
+ * UpButton was pushed
+ */
 void up()
 {
     lightData->dirty = true;
+    idleReset(IDLE_LONG);
+
     if (lightData->state == STATE_TIME)
     {
-        DateTime now = rtc.now();
-        rtc.adjust(now + step_small);
+        lightData->time = rtc.now() + step_small;
+        lightData->state = STATE_SET_TIME;
+    }
+    else if (lightData->state == STATE_SET_TIME)
+    {
+        lightData->time = lightData->time + step_small;
     }
     else if (lightData->state == STATE_ON)
     {
-        idleReset();
         lightData->on = lightData->on + step_big;
-        char buf[] = "hh:mm";
-        Serial.print("on-time: ");
-        Serial.println(lightData->on.toString(buf));
     }
     else if (lightData->state == STATE_OFF)
     {
-        idleReset();
         lightData->off = lightData->off + step_big;
-        char buf[] = "hh:mm";
-        Serial.print("off-time: ");
-        Serial.println(lightData->off.toString(buf));
     }
 }

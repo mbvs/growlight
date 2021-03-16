@@ -3,6 +3,6 @@
 
 #include "states.h"
 
-void lightsTick(LightData *current); 
+void tick_lights(LightData *current); 
 
 #endif

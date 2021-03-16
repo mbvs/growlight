@@ -4,7 +4,7 @@
 #include "states.h"
 #include "RTClib.h"
 
-void initDisplay();
-void displayTick(LightData *current);
+void init_display();
+void tick_display(LightData *current);
 
 #endif

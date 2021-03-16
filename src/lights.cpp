@@ -3,7 +3,7 @@
 
 extern RTC_DS3231 rtc;
 
-typedef enum
+typedef enum                                
 {
     OFF,
     ON,
@@ -11,23 +11,23 @@ typedef enum
     DOWN
 } LightsState;
 
-static LightsState lights_state = OFF;
+static LightsState lights_state = OFF;                  // local states of lights
 
-static const byte DIMM_INTERVAL = 40;
-static unsigned long then;
-static byte level = 0;
+static const byte DIMM_INTERVAL = 40;                   // timespan for dimming
+static unsigned long then;                              // timing
+static byte level = 0;                                  // stores current dimming level
 
-static void check_times(LightData *store);
-static void check_lights(LightData *store);
+static void check_times(LightData *store);              // checks wether now is in off or on timespan
+static void check_lights(LightData *store);             // checks status of lights
 
-static void check_off_time(int time, int on, int off);
-static void check_on_time(int time, int on, int off);
-static void dimm_up();
-static void dimm_down();
-static void tick_up();
-static void tick_down();
+static void check_off_time(int time, int on, int off);  // checks off timespan
+static void check_on_time(int time, int on, int off);   // checks on timespan
+static void dimm_up();                                  // starts dimming up
+static void dimm_down();                                // starts dimming down
+static void tick_up();                                  // ticks dimming up
+static void tick_down();                                // tick dimming down
 
-void lightsTick(LightData *store)
+void tick_lights(LightData *store)
 {
     if (store->mode == MODE_TIMER)
     {
@@ -79,14 +79,6 @@ void check_times(LightData *store)
     int on = store->on.hour() * 100 + store->on.minute();
     int off = store->off.hour() * 100 + store->off.minute();
 
-    // Serial.print(time);
-    // Serial.print(" : ");
-    // Serial.print(on);
-    // Serial.print(" - ");
-    // Serial.print(off);
-    // Serial.print(" -> ");
-    // Serial.println(state);
-
     switch (lights_state)
     {
     case ON:
@@ -111,7 +103,6 @@ void check_on_time(int time, int on, int off)
         if (on <= time && time < off)
         {
             dimm_up();
-            Serial.println("turning lights on (off > on)");
         }
     }
     else
@@ -119,7 +110,6 @@ void check_on_time(int time, int on, int off)
         if (!(off <= time && time < on))
         {
             dimm_up();
-            Serial.println("turning lights on (off < on)");
         }
     }
 }
@@ -131,7 +121,6 @@ void check_off_time(int time, int on, int off)
         if (!(on <= time && time < off))
         {
             dimm_down();
-            Serial.println("turning lights off (off > on)");
         }
     }
     else
@@ -139,7 +128,6 @@ void check_off_time(int time, int on, int off)
         if (off <= time && time < on)
         {
             dimm_down();
-            Serial.println("turning lights off (off < on)");
         }
     }
 }
@@ -148,12 +136,14 @@ static void dimm_up()
 {
     then = millis();
     lights_state = UP;
+    Serial.println("turning light ON");
 }
 
 static void dimm_down()
 {
     then = millis();
     lights_state = DOWN;
+    Serial.println("turning light DOWN");
 }
 
 static void tick_up()
@@ -168,8 +158,6 @@ static void tick_up()
         else
         {
             analogWrite(FET, level++);
-            Serial.print("dimming up ");
-            Serial.println(level);
             then = millis();
         }
     }
@@ -187,8 +175,6 @@ static void tick_down()
         else
         {
             analogWrite(FET, level--);
-            Serial.print("dimming down ");
-            Serial.println(level);
             then = millis();
         }
     }
