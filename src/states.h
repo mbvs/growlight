@@ -11,14 +11,14 @@ typedef enum            // all states display can be in (switched by stateButton
   STATE_OFF
 } State;
 
-typedef enum            // all modes timer can be in (switch by toggle switch)     
+typedef enum                  // all modes timer can be in (switch by toggle switch)     
 {
   MODE_TIMER,
   MODE_LIGHTS,
   MODE_OFF
 } Mode;
 
-typedef struct {        // main data structure
+typedef struct {             // main data structure
     Mode mode;
     State state;
     DateTime time;

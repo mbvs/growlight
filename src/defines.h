@@ -15,7 +15,7 @@
 
 #define FET 10
 
-#define CLK 9
-#define DIO 8
+#define CLK 9 // display clock
+#define DIO 8 // display data
 
 #endif

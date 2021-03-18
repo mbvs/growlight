@@ -27,6 +27,10 @@ static void dimm_down();                                // starts dimming down
 static void tick_up();                                  // ticks dimming up
 static void tick_down();                                // tick dimming down
 
+
+/**
+ * Handle tick event
+ */
 void tick_lights(LightData *store)
 {
     if (store->mode == MODE_TIMER)
@@ -39,6 +43,10 @@ void tick_lights(LightData *store)
     }
 }
 
+/**
+ * check wether lights should be on or off
+ * when in manual mode, i.e. not timed
+ */
 void check_lights(LightData *store)
 {
     switch (lights_state)
@@ -66,6 +74,10 @@ void check_lights(LightData *store)
     }
 }
 
+/**
+ * check wether lights should be on or off
+ * when in timed mode
+ */
 void check_times(LightData *store)
 {
     // don't switch lights while editing times
@@ -96,6 +108,9 @@ void check_times(LightData *store)
     }
 }
 
+/**
+ * Check wether current time lies in on span
+ */
 void check_on_time(int time, int on, int off)
 {
     if (off > on)
@@ -114,6 +129,9 @@ void check_on_time(int time, int on, int off)
     }
 }
 
+/**
+ * Check wether current time lies in off span
+ */
 void check_off_time(int time, int on, int off)
 {
     if (off > on)
@@ -132,6 +150,9 @@ void check_off_time(int time, int on, int off)
     }
 }
 
+/**
+ * Initalize switching on the lamps
+ */
 static void dimm_up()
 {
     then = millis();
@@ -139,6 +160,9 @@ static void dimm_up()
     Serial.println("turning light ON");
 }
 
+/**
+ * Initialize switching off the lamps
+ */
 static void dimm_down()
 {
     then = millis();
@@ -146,6 +170,9 @@ static void dimm_down()
     Serial.println("turning light DOWN");
 }
 
+/**
+ * Dimm lamps gradually on
+ */
 static void tick_up()
 {
     if (millis() - then > DIMM_INTERVAL)
@@ -163,6 +190,9 @@ static void tick_up()
     }
 }
 
+/**
+ * Dimm lamps gradually off
+ */
 static void tick_down()
 {
     if (millis() - then > DIMM_INTERVAL)

@@ -19,22 +19,28 @@ typedef enum
 {
     TEMP,
     TIME
-} TimeTempState;
+} TimeTempState;                                // local state for switching between time and temp display
 
-static unsigned long then = millis();
-static int pulse_count = 0;
-static int pulse_count_max = TIME_PULSE_COUNT;
-static bool colonVisible = false;
-static TimeTempState display_state = TIME;
+static unsigned long then = millis();           // timinig
+static int pulse_count = 0;                     // counting of pulses
+static int pulse_count_max = TIME_PULSE_COUNT;  // initialize for time display
+static bool colonVisible = false;               // initialize center ":" off
+static TimeTempState display_state = TIME;      // initialize with time display
 
-static void update_display(LightData *state);
-static void tick_time_temp();
+static void update_display(LightData *state);   // update display when state is dirty
+static void tick_time_temp();                   // pulse when displaying time/temp
 
+/**
+ * Initialize the display
+ */
 void init_display()
 {
     display.setBrightness(2);
 }
 
+/**
+ * Check state and update display when dirty
+ */
 void tick_display(LightData *store)
 {
     if (store->dirty)
@@ -47,6 +53,9 @@ void tick_display(LightData *store)
     }
 }
 
+/**
+ * Update display depending on state
+ */
 void update_display(LightData *store)
 {
     digitalWrite(LED_TIME, LOW);
@@ -86,6 +95,9 @@ void update_display(LightData *store)
     store->dirty = false;
 }
 
+/**
+ * handle pulses for ":" blinking and change between time and temp
+ */
 void tick_time_temp()
 {
     if (millis() - then > 500)

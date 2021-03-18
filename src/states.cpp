@@ -129,7 +129,7 @@ void state()
         lightData->state = STATE_OFF;
         Serial.println("switching state to STATE_OFF");
     }
-    else if (lightData->state == STATE_OFF)
+    else if (lightData->state == STATE_OFF || lightData->state == STATE_SET_TIME)
     {
         lightData->state = STATE_TIME;
         Serial.println("switching state to STATE_TIME");
