@@ -10,6 +10,7 @@ typedef enum
     UP,
     DOWN
 } LightsState;
+
 // LUT for log light brightness
 // see https://www.mikrocontroller.net/articles/LED-Fading
 static const uint16_t pwm_table[32] PROGMEM =
