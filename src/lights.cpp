@@ -10,10 +10,17 @@ typedef enum
     UP,
     DOWN
 } LightsState;
+                                                        // LUT for log light brightness
+                                                        // see https://www.mikrocontroller.net/articles/LED-Fading
+static const uint16_t pwm_table[32] PROGMEM =
+{
+    0, 1, 2, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10, 11, 13, 16, 19, 23,
+    27, 32, 38, 45, 54, 64, 76, 91, 108, 128, 152, 181, 215, 255
+};                                                      
 
-static LightsState lights_state = OFF;                  // local states of lights
+static LightsState lights_state = OFF;                  // local state of lights
 
-static const byte DIMM_INTERVAL = 40;                   // timespan for dimming
+static const byte DIMM_INTERVAL = 20;                   // timespan for dimming
 static unsigned long then;                              // timing
 static byte level = 0;                                  // stores current dimming level
 
@@ -177,15 +184,17 @@ static void tick_up()
 {
     if (millis() - then > DIMM_INTERVAL)
     {
-        if (level == 255)
+        if (level == 31)
         {
             lights_state = ON;
             digitalWrite(FET, HIGH);
         }
         else
         {
-            analogWrite(FET, level++);
+            analogWrite(FET, pgm_read_word (& pwm_table[level++]));
             then = millis();
+            Serial.print("level: ");
+            Serial.println(level);
         }
     }
 }
@@ -204,8 +213,10 @@ static void tick_down()
         }
         else
         {
-            analogWrite(FET, level--);
+            analogWrite(FET, pgm_read_word (& pwm_table[level--]));;
             then = millis();
+            Serial.print("level: ");
+            Serial.println(level);
         }
     }
 }

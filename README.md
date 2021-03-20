@@ -20,3 +20,5 @@ It also features a 3-way toggle switch to manually turn on and off the lights or
 Growlight is developed in Visual Studio Code with the PlatformIO Plugin. To compile and flash connect your board to the PC, edit the platformio.ini upload_port setting to your needs and  issue
 the platformIO build and upload commands.
 
+## TODO
+* fix switching to on/off if lights are dimming
