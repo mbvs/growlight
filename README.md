@@ -21,4 +21,4 @@ Growlight is developed in Visual Studio Code with the PlatformIO Plugin. To comp
 the platformIO build and upload commands.
 
 ## TODO
-* fix switching to on/off if lights are dimming
+* add toggle switch to schematics
