@@ -1,3 +1,4 @@
 (fp_lib_table
   (lib (name megasaturnv)(type KiCad)(uri /home/marcus/Projects/GrowLight/GrowLight/schematic/footprints)(options "")(descr ""))
+  (lib (name ToggleSwitch)(type KiCad)(uri ${KIPRJMOD}/toggle_switch)(options "")(descr ""))
 )
