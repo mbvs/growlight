@@ -29,6 +29,16 @@
             "projectEnvName": "nanoatmega328new",
             "toolchainBinDir": "/home/marcus/.platformio/packages/toolchain-atmelavr/bin",
             "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (without uploading)",
+            "executable": "/home/marcus/Projects/GrowLight/GrowLight/.pio/build/nanoatmega328new/firmware.elf",
+            "projectEnvName": "nanoatmega328new",
+            "toolchainBinDir": "/home/marcus/.platformio/packages/toolchain-atmelavr/bin",
+            "internalConsoleOptions": "openOnSessionStart",
+            "loadMode": "manual"
         }
     ]
 }

@@ -37,7 +37,8 @@ void init_states()
         .on = DateTime(1, 1, 1, int(EEPROM.read(0)), int(EEPROM.read(1)), 0),
         .off = DateTime(1, 1, 1, int(EEPROM.read(2)), int(EEPROM.read(3)), 0),
         .blink = false,
-        .dirty = true};
+        .dirty = true
+        };
 }
 
 /**
@@ -116,6 +117,7 @@ void tick_mode()
  */
 void state()
 {
+    Serial.println("state button pressed");
     lightData->dirty = true;
     idleReset(IDLE_LONG);
 
@@ -141,6 +143,7 @@ void state()
  */
 void confirm()
 {
+    Serial.println("confirm button pressed");
     idleReset(IDLE_SHORT);
     lightData->blink = true;
     lightData->dirty = true;
@@ -170,6 +173,7 @@ void confirm()
  */
 void down()
 {
+    Serial.println("down button pressed");
     lightData->dirty = true;
     idleReset(IDLE_LONG);
 
@@ -198,6 +202,7 @@ void down()
  */
 void up()
 {
+    Serial.println("up button pressed");
     lightData->dirty = true;
     idleReset(IDLE_LONG);
 

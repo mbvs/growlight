@@ -19,16 +19,16 @@ static void init_pins();
 void setup()
 {
   Serial.begin(9600);
-
   init_pins();
   init_states();
   init_display();
 
   if (!rtc.begin())
   {
+    Serial.println("RTC ERROR");
     abort();
   }
-
+ 
   if (rtc.lostPower())
   {
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
